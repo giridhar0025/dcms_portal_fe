@@ -1,6 +1,8 @@
+@config '../tailwind.config.cjs';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@reference utilities as *;
 
 @layer base {
   :root {
@@ -85,7 +87,9 @@
     @apply scroll-smooth;
   }
   body {
-    @apply bg-background text-foreground overscroll-none;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    @apply overscroll-none;
     /* font-feature-settings: "rlig" 1, "calt" 1; */
     font-synthesis-weight: none;
     text-rendering: optimizeLegibility;
@@ -120,9 +124,14 @@
   }
 
   .step:before {
-    @apply md:absolute w-8 h-8 md:w-9 md:h-9 bg-muted rounded-full font-mono font-medium text-center text-base inline-flex items-center justify-center -indent-px border-4 mr-2 border-background;
-    @apply md:ml-[-50px] md:mt-[-4px];
+    @apply w-8 h-8 bg-muted rounded-full font-mono font-medium text-center text-base inline-flex items-center justify-center -indent-px border-4 mr-2 border-background;
     content: counter(step);
+  }
+
+  @media (min-width: theme('screens.md')) {
+    .step:before {
+      @apply absolute w-9 h-9 ml-[-50px] mt-[-4px];
+    }
   }
 
   .chunk-container {
