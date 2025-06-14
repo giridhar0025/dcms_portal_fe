@@ -27,22 +27,29 @@ export const login = createAsyncThunk<
   { user: User; accessToken: string },
   { email: string; password: string },
   { rejectValue: string }
->('http://localhost:3000/auth/login', async (credentials, { rejectWithValue }) => {
-  try {
-     const loginRes = await axios.post('http://localhost:3000/api/auth/login', credentials);
-    const { accessToken } = loginRes.data;
+>(
+  'http://localhost:3000/auth/login',
+  async (credentials, { rejectWithValue }) => {
+    try {
+      const loginRes = await axios.post(
+        'http://localhost:3000/api/auth/login',
+        credentials
+      );
+      const { accessToken } = loginRes.data;
 
-    const userRes = await axios.get('http://localhost:3000/api/auth/me', {
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      }
-    });
-    return { user: userRes.data, accessToken };
-  } catch (err: any) {
-    const message = err.loginRes?.data?.message || err.message || 'Login failed';
-    return rejectWithValue(message);
+      const userRes = await axios.get('http://localhost:3000/api/auth/me', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      });
+      return { user: userRes.data, accessToken };
+    } catch (err: any) {
+      const message =
+        err.loginRes?.data?.message || err.message || 'Login failed';
+      return rejectWithValue(message);
+    }
   }
-});
+);
 
 const authSlice = createSlice({
   name: 'auth',
@@ -54,10 +61,14 @@ const authSlice = createSlice({
     ) {
       state.user = action.payload.user;
       state.accessToken = action.payload.accessToken;
+      localStorage.setItem('accessToken', action.payload.accessToken);
+      localStorage.setItem('user', JSON.stringify(action.payload.user));
     },
     logout(state) {
       state.user = null;
       state.accessToken = null;
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('user');
     }
   },
   extraReducers: (builder) => {
@@ -70,6 +81,8 @@ const authSlice = createSlice({
         state.status = 'idle';
         state.user = action.payload.user;
         state.accessToken = action.payload.accessToken;
+        localStorage.setItem('accessToken', action.payload.accessToken);
+        localStorage.setItem('user', JSON.stringify(action.payload.user));
       })
       .addCase(login.rejected, (state, action) => {
         state.status = 'failed';
