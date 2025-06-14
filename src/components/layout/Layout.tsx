@@ -1,12 +1,9 @@
-import { ReactNode, useState } from 'react';
+import { useState } from 'react';
+import { Outlet } from 'react-router-dom';
 import Header from './Header';
 import Sidebar from './Sidebar';
 
-interface Props {
-  children: ReactNode;
-}
-
-export default function Layout({ children }: Props) {
+export default function Layout() {
   const [open, setOpen] = useState(true);
 
   return (
@@ -14,7 +11,9 @@ export default function Layout({ children }: Props) {
       <Sidebar open={open} onToggle={() => setOpen(!open)} />
       <div className="flex-1 flex flex-col">
         <Header onToggle={() => setOpen(!open)} />
-        <main className="flex-1 p-4 overflow-auto">{children}</main>
+        <main className="flex-1 p-4 overflow-auto">
+          <Outlet />
+        </main>
       </div>
     </div>
   );

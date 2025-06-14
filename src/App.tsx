@@ -9,17 +9,17 @@ const Dashboard = lazy(() => import('./pages/Dashboard'));
 
 export default function App() {
   return (
-    <Layout>
-      <Suspense fallback={<div>Loading...</div>}>
-        <Routes>
+    <Suspense fallback={<div>Loading...</div>}>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
           <Route
             path="/dashboard"
             element={<PrivateRoute element={<Dashboard />} />}
           />
-        </Routes>
-      </Suspense>
-    </Layout>
+        </Route>
+      </Routes>
+    </Suspense>
   );
 }
