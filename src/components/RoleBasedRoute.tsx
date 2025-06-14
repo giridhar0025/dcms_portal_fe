@@ -14,8 +14,9 @@ export default function RoleBasedRoute({ element, allowedRoles }: Props) {
     return <Navigate to="/login" replace />;
   }
 
-  const userRole = user?.role as Role | undefined;
-  if (userRole && allowedRoles.includes(userRole)) {
+  const userRoles = user?.roles as Role[] | undefined;
+  const hasAccess = userRoles?.some((r) => allowedRoles.includes(r));
+  if (hasAccess) {
     return element;
   }
 

@@ -2,6 +2,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { Role } from '../constants/roles';
 import { AppDispatch, RootState } from '../store';
 import { login } from '../store/slices/authSlice';
 import { Card, Input, Button } from '../components/ui';
@@ -15,6 +17,7 @@ type FormData = z.infer<typeof schema>;
 
 export default function LoginPage() {
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
   const { status, error } = useSelector((state: RootState) => state.auth);
   const {
     register,
@@ -22,8 +25,29 @@ export default function LoginPage() {
     formState: { errors }
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-  const onSubmit = (data: FormData) => {
-    dispatch(login({ email: data.email, password: data.password }));
+  const onSubmit = async (data: FormData) => {
+    try {
+      const result = await dispatch(
+        login({ email: data.email, password: data.password })
+      ).unwrap();
+
+      const primaryRole = result.user.roles[0] as Role | undefined;
+      switch (primaryRole) {
+        case Role.Admin:
+          navigate('/users');
+          break;
+        case Role.Receptionist:
+          navigate('/appointments');
+          break;
+        case Role.Dentist:
+          navigate('/patients');
+          break;
+        default:
+          navigate('/dashboard');
+      }
+    } catch {
+      // Error handling is managed in the slice
+    }
   };
 
   return (
