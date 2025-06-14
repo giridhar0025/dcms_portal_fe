@@ -32,6 +32,7 @@ export default function LoginPage() {
       ).unwrap();
 
       const primaryRole = result.user.roles[0] as Role | undefined;
+      console.log(primaryRole, 'vhvhvhv')
       switch (primaryRole) {
         case Role.Admin:
           navigate('/users');
@@ -42,11 +43,9 @@ export default function LoginPage() {
         case Role.Dentist:
           navigate('/patients');
           break;
-        default:
-          navigate('/dashboard');
       }
     } catch {
-      // Error handling is managed in the slice
+      navigate('/login');
     }
   };
 
