@@ -26,9 +26,9 @@ export const login = createAsyncThunk<
   { user: User; accessToken: string },
   { email: string; password: string },
   { rejectValue: string }
->('auth/login', async (credentials, { rejectWithValue }) => {
+>('http://localhost:3000/auth/login', async (credentials, { rejectWithValue }) => {
   try {
-    const response = await axios.post('/api/auth/login', credentials);
+    const response = await axios.post('http://localhost:3000/api/auth/login', credentials);
     return response.data;
   } catch (err: any) {
     const message = err.response?.data?.message || err.message || 'Login failed';

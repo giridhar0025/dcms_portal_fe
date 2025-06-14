@@ -23,8 +23,10 @@ import { twMerge } from 'tailwind-merge';
  *   - Displays a spinner when `loading` is true and disables interactions.
  *   - Adjusts layout for full width vs inline.
  */
+
 export interface ButtonProps<T extends ElementType = 'button'> {
-  /** Visual style variant */
+  children?: React.ReactNode; // <-- Add this line
+   /** Visual style variant */
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
   /** Size of the button */
   size?: 'xs' | 'sm' | 'md' | 'lg';
@@ -40,6 +42,7 @@ export interface ButtonProps<T extends ElementType = 'button'> {
   as?: T;
   /** Additional class name overrides */
   className?: string;
+  disabled?: boolean;
 }
 
 const baseStyles = {

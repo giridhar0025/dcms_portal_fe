@@ -7,8 +7,8 @@ import { login } from '../store/slices/authSlice';
 import { Card, Input, Button } from '../components/ui';
 
 const schema = z.object({
-  email: z.string().email({ message: 'Invalid email address' }),
-  password: z.string().min(6, { message: 'Password must be at least 6 characters' })
+  email: z.string().email(),
+  password: z.string().min(6)
 });
 
 type FormData = z.infer<typeof schema>;
@@ -23,7 +23,7 @@ export default function LoginPage() {
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const onSubmit = (data: FormData) => {
-    dispatch(login(data));
+    dispatch(login({ email: data.email, password: data.password }));
   };
 
   return (
@@ -48,7 +48,6 @@ export default function LoginPage() {
             error={errors.password?.message}
           />
           <Button
-            type="submit"
             fullWidth
             loading={status === 'loading'}
             disabled={status === 'loading'}
