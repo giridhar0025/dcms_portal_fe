@@ -18,7 +18,7 @@ export default function App() {
             <Route
               key={path}
               path={path}
-              element={<RoleBasedRoute element={element} allowedRoles={roles} />
+              element={<RoleBasedRoute element={element} allowedRoles={roles} />}
             />
           ))}
         </Route>
