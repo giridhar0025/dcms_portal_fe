@@ -1,11 +1,11 @@
 import { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Layout from './components/layout/Layout';
-import PrivateRoute from './components/PrivateRoute';
+import RoleBasedRoute from './components/RoleBasedRoute';
+import { appRoutes } from './routes/routeConfig';
 
 const Home = lazy(() => import('./pages/Home'));
 const Login = lazy(() => import('./pages/LoginPage'));
-const Dashboard = lazy(() => import('./pages/Dashboard'));
 
 export default function App() {
   return (
@@ -14,10 +14,13 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
-          <Route
-            path="/dashboard"
-            element={<PrivateRoute element={<Dashboard />} />}
-          />
+          {appRoutes.map(({ path, element, roles }) => (
+            <Route
+              key={path}
+              path={path}
+              element={<RoleBasedRoute element={element} allowedRoles={roles} />
+            />
+          ))}
         </Route>
       </Routes>
     </Suspense>
