@@ -28,10 +28,18 @@ export const login = createAsyncThunk<
   { rejectValue: string }
 >('http://localhost:3000/auth/login', async (credentials, { rejectWithValue }) => {
   try {
-    const response = await axios.post('http://localhost:3000/api/auth/login', credentials);
-    return response.data;
+     const loginRes = await axios.post('http://localhost:3000/api/auth/login', credentials);
+    const { accessToken } = loginRes.data;
+
+    const userRes = await axios.get('http://localhost:3000/api/auth/me', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
+   console.log('sojvojsov', userRes)
+    return { user: userRes.data, accessToken };
   } catch (err: any) {
-    const message = err.response?.data?.message || err.message || 'Login failed';
+    const message = err.loginRes?.data?.message || err.message || 'Login failed';
     return rejectWithValue(message);
   }
 });
