@@ -4,7 +4,13 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import App from './App';
 import { store } from './store';
+import createUserFromToken from './utils/createUserFromToken';
 import './index.css';
+
+const savedToken = localStorage.getItem('accessToken');
+if (savedToken) {
+  createUserFromToken(savedToken, store.dispatch);
+}
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
