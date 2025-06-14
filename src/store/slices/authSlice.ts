@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from '../../api/axiosInstance';
+import { Role } from '../../constants/roles';
 
 export interface User {
   id: string;
   name: string;
   email: string;
-  role: string;
+  roles: Role[];
 }
 
 interface AuthState {
@@ -36,7 +37,6 @@ export const login = createAsyncThunk<
         Authorization: `Bearer ${accessToken}`
       }
     });
-   console.log('sojvojsov', userRes)
     return { user: userRes.data, accessToken };
   } catch (err: any) {
     const message = err.loginRes?.data?.message || err.message || 'Login failed';
