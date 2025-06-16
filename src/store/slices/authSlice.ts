@@ -28,16 +28,16 @@ export const login = createAsyncThunk<
   { email: string; password: string },
   { rejectValue: string }
 >(
-  'http://localhost:3000/auth/login',
+  'https://dcms-portal-be.onrender.com/auth/login',
   async (credentials, { rejectWithValue }) => {
     try {
       const loginRes = await axios.post(
-        'http://localhost:3000/api/auth/login',
+        'https://dcms-portal-be.onrender.com/api/auth/login',
         credentials
       );
       const { accessToken } = loginRes.data;
 
-      const userRes = await axios.get('http://localhost:3000/api/auth/me', {
+      const userRes = await axios.get('https://dcms-portal-be.onrender.com/api/auth/me', {
         headers: {
           Authorization: `Bearer ${accessToken}`
         }
