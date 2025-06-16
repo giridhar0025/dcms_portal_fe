@@ -9,6 +9,7 @@ npm install
 ```
 
 Create a `.env` file based on `.env.example` and set your environment variables.
+At minimum, set `VITE_API_BASE_URL` to `https://dcms-portal-be.onrender.com`.
 
 ## Development
 
