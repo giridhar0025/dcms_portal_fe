@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import FullCalendar from '@fullcalendar/react';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin from '@fullcalendar/interaction';
+import CalendarView from '../components/scheduling/CalendarView';
 import { RootState, AppDispatch } from '../store';
 import {
   fetchAppointments,
@@ -37,13 +35,6 @@ export default function Appointments() {
     setOpen(true);
   };
 
-  const handleEventClick = (arg: any) => {
-    const appt = items.find((a) => a.id === arg.event.id);
-    if (appt) {
-      setForm(appt);
-      setOpen(true);
-    }
-  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -67,19 +58,15 @@ export default function Appointments() {
 
   return (
     <div className="p-4">
-      <FullCalendar
-        height="auto"
-        plugins={[dayGridPlugin, interactionPlugin]}
-        initialView="dayGridMonth"
-        selectable
-        select={handleSelect}
+      <CalendarView
         events={items.map((a) => ({
           id: a.id,
           title: a.notes || 'Appointment',
           start: a.startTime,
           end: a.endTime,
         }))}
-        eventClick={handleEventClick}
+        onSelect={handleSelect}
+        onDrop={() => {}}
       />
       <Modal isOpen={open} onClose={() => setOpen(false)}>
         <Modal.Header>{form.id ? 'Edit Appointment' : 'New Appointment'}</Modal.Header>
