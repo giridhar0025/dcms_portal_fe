@@ -8,11 +8,29 @@ export interface InputProps
   error?: string;
   leadingIcon?: React.ReactNode;
   trailingIcon?: React.ReactNode;
+  variant?: 'outlined' | 'filled' | 'standard';
+  size?: 'small' | 'medium';
+  color?: 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning';
   className?: string;
 }
 
 const baseInputClasses =
-  'block w-full rounded-md border focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50';
+  'block w-full focus:outline-none focus:ring-2 disabled:bg-gray-50';
+
+const variantClasses = {
+  outlined: 'border rounded-md bg-white',
+  filled: 'border border-transparent rounded-md bg-gray-50 focus:bg-white',
+  standard: 'border-b rounded-none bg-transparent',
+};
+
+const colorRing = {
+  primary: 'focus:ring-blue-500',
+  secondary: 'focus:ring-gray-500',
+  success: 'focus:ring-green-500',
+  error: 'focus:ring-red-500',
+  info: 'focus:ring-sky-500',
+  warning: 'focus:ring-yellow-500',
+};
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   (
@@ -22,6 +40,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       error,
       leadingIcon,
       trailingIcon,
+      variant = 'outlined',
+      size = 'medium',
+      color = 'primary',
       className,
       id,
       ...props
@@ -47,11 +68,14 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             aria-describedby={errorId}
             className={twMerge(
               baseInputClasses,
+              variantClasses[variant],
+              size === 'small' ? 'text-sm px-2 py-1' : 'text-base px-3 py-2',
               leadingIcon && 'pl-9',
               trailingIcon && 'pr-9',
-              error
-                ? 'border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500'
-                : 'border-gray-300',
+              colorRing[color],
+              !error && variant !== 'filled' && 'border-gray-300',
+              error &&
+                'border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500',
               className
             )}
             {...props}

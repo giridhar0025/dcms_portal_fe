@@ -19,23 +19,27 @@ import { twMerge } from 'tailwind-merge';
  *   - Variants map to Tailwind classes via configuration.
  */
 export interface BadgeProps {
-  variant?: 'default' | 'info' | 'success' | 'warning' | 'danger';
+  color?: 'default' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning';
+  variant?: 'standard' | 'dot';
   shape?: 'pill' | 'circle';
   count?: number;
   className?: string;
   children?: React.ReactNode;
 }
 
-const variantStyles = {
+const colorStyles = {
   default: 'bg-gray-200 text-gray-900',
-  info: 'bg-blue-500 text-white',
-  success: 'bg-green-500 text-white',
-  warning: 'bg-yellow-500 text-white',
-  danger: 'bg-red-500 text-white',
+  primary: 'bg-blue-600 text-white',
+  secondary: 'bg-gray-600 text-white',
+  success: 'bg-green-600 text-white',
+  error: 'bg-red-600 text-white',
+  info: 'bg-sky-600 text-white',
+  warning: 'bg-yellow-600 text-black',
 };
 
 export const Badge: React.FC<BadgeProps> = ({
-  variant = 'default',
+  color = 'default',
+  variant = 'standard',
   shape = 'pill',
   count,
   className,
@@ -46,12 +50,18 @@ export const Badge: React.FC<BadgeProps> = ({
     <span
       className={twMerge(
         'inline-flex items-center text-xs font-medium',
-        variantStyles[variant],
+        colorStyles[color],
         shapeClass,
         className
       )}
     >
-      {typeof count === 'number' ? count : children}
+      {variant === 'dot' ? (
+        <span className="sr-only">{children}</span>
+      ) : typeof count === 'number' ? (
+        count
+      ) : (
+        children
+      )}
     </span>
   );
 };

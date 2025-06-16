@@ -9,7 +9,7 @@ import { twMerge } from 'tailwind-merge';
  *   Includes provider, hook, and individual toast components.
  *
  * Flexibility:
- *   - Different intents and durations per toast.
+ *   - Different severities and durations per toast.
  *   - Pause timer on hover or via user interaction.
  *   - Customizable styling via className props.
  *
@@ -24,7 +24,8 @@ export interface ToastOptions {
   id?: string;
   title: React.ReactNode;
   description?: React.ReactNode;
-  intent?: 'success' | 'info' | 'warning' | 'error';
+  /** Severity level similar to MUI Snackbar */
+  severity?: 'success' | 'info' | 'warning' | 'error';
   duration?: number;
   onClose?: () => void;
   className?: string;
@@ -78,7 +79,7 @@ export const useToast = () => {
 export const Toast: React.FC<ToastOptions> = ({
   title,
   description,
-  intent = 'info',
+  severity = 'info',
   onClose,
   className,
   titleClassName,
@@ -92,7 +93,7 @@ export const Toast: React.FC<ToastOptions> = ({
   };
 
   return (
-    <div className={twMerge('rounded shadow-lg px-4 py-3 flex items-start space-x-2', intentStyles[intent], className)}>
+    <div className={twMerge('rounded shadow-lg px-4 py-3 flex items-start space-x-2', intentStyles[severity], className)}>
       <div className="flex-1">
         <p className={twMerge('font-semibold', titleClassName)}>{title}</p>
         {description && <p className={twMerge('text-sm mt-1', descriptionClassName)}>{description}</p>}
@@ -110,6 +111,6 @@ export default Toast;
  * Usage Example:
  * ```tsx
  * const { addToast } = useToast();
- * addToast({ title: 'Saved', intent: 'success' });
+ * addToast({ title: 'Saved', severity: 'success' });
  * ```
  */

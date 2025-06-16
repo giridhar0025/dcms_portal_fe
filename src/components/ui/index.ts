@@ -7,3 +7,7 @@ export { default as Tooltip } from './Tooltip';
 export { default as Badge } from './Badge';
 export { default as Avatar } from './Avatar';
 export { ToastProvider, useToast, default as Toast } from './Toast';
+export { default as Checkbox } from './Checkbox';
+export { default as Switch } from './Switch';
+export { default as Radio } from './Radio';
+export { default as Slider } from './Slider';
