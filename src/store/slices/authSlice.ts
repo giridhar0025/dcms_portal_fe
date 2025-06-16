@@ -16,9 +16,11 @@ interface AuthState {
   error: string | null;
 }
 
+const storedUser = localStorage.getItem('user');
+const storedToken = localStorage.getItem('accessToken');
 const initialState: AuthState = {
-  user: null,
-  accessToken: null,
+  user: storedUser ? (JSON.parse(storedUser) as User) : null,
+  accessToken: storedToken,
   status: 'idle',
   error: null
 };
