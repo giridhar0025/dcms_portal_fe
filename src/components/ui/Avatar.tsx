@@ -23,6 +23,8 @@ export interface AvatarProps {
   alt?: string;
   size?: 'xs' | 'sm' | 'md' | 'lg' | number;
   status?: 'online' | 'offline' | 'away';
+  /** Shape style similar to MUI Avatar */
+  variant?: 'circular' | 'rounded' | 'square';
   className?: string;
 }
 
@@ -33,11 +35,18 @@ const sizeMap: Record<string, string> = {
   lg: 'w-12 h-12 text-lg',
 };
 
+const variantMap = {
+  circular: 'rounded-full',
+  rounded: 'rounded-md',
+  square: 'rounded-none',
+};
+
 export const Avatar: React.FC<AvatarProps> = ({
   src,
   alt = '',
   size = 'md',
   status,
+  variant = 'circular',
   className,
 }) => {
   const [error, setError] = useState(false);
@@ -48,6 +57,7 @@ export const Avatar: React.FC<AvatarProps> = ({
     .join('');
   const sizeClass = typeof size === 'number' ? undefined : sizeMap[size];
   const customSizeStyle = typeof size === 'number' ? { width: size, height: size } : undefined;
+  const variantClass = variantMap[variant];
 
   const statusColor = {
     online: 'bg-green-500',
@@ -62,13 +72,14 @@ export const Avatar: React.FC<AvatarProps> = ({
           src={src}
           alt={alt}
           onError={() => setError(true)}
-          className={twMerge('rounded-full object-cover', sizeClass)}
+          className={twMerge('object-cover', variantClass, sizeClass)}
           style={customSizeStyle}
         />
       ) : (
         <span
           className={twMerge(
-            'flex items-center justify-center rounded-full bg-gray-200 text-gray-600',
+            'flex items-center justify-center bg-gray-200 text-gray-600',
+            variantClass,
             sizeClass
           )}
           style={customSizeStyle}

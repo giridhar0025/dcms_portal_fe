@@ -25,6 +25,7 @@ export interface CardProps {
   imageSrc?: string;
   imageAlt?: string;
   elevation?: 0 | 1 | 2 | 3 | 4 | 5;
+  variant?: 'elevation' | 'outlined';
   className?: string;
   children?: React.ReactNode;
 }
@@ -44,11 +45,17 @@ export const Card: React.FC<CardProps> = ({
   imageSrc,
   imageAlt,
   elevation = 1,
+  variant = 'elevation',
   className,
   children,
 }) => {
+  const style =
+    variant === 'outlined'
+      ? 'border border-gray-200'
+      : elevationMap[elevation];
+
   return (
-    <div className={twMerge('bg-white rounded-md overflow-hidden', elevationMap[elevation], className)}>
+    <div className={twMerge('bg-white rounded-md overflow-hidden', style, className)}>
       {imageSrc && (
         <img src={imageSrc} alt={imageAlt} className="w-full h-auto" />
       )}

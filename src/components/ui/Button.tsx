@@ -25,11 +25,13 @@ import { twMerge } from 'tailwind-merge';
  */
 
 export interface ButtonProps<T extends ElementType = 'button'> {
-  children?: React.ReactNode; // <-- Add this line
-   /** Visual style variant */
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
+  children?: React.ReactNode;
+  /** Visual style variant */
+  variant?: 'contained' | 'outlined' | 'text';
+  /** Color palette */
+  color?: 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning';
   /** Size of the button */
-  size?: 'xs' | 'sm' | 'md' | 'lg';
+  size?: 'small' | 'medium' | 'large';
   /** Icon placed to the left of children */
   leftIcon?: ReactNode;
   /** Icon placed to the right of children */
@@ -45,28 +47,60 @@ export interface ButtonProps<T extends ElementType = 'button'> {
   disabled?: boolean;
 }
 
-const baseStyles = {
-  primary:
-    'bg-blue-600 text-white hover:bg-blue-700 disabled:bg-blue-400 focus:ring-blue-500',
-  secondary:
-    'bg-gray-100 text-gray-900 hover:bg-gray-200 disabled:bg-gray-100 focus:ring-gray-400',
-  outline:
-    'border border-gray-300 text-gray-900 hover:bg-gray-50 disabled:bg-transparent',
-  ghost: 'text-gray-900 hover:bg-gray-100 disabled:text-gray-400',
-};
+const colorMap = {
+  primary: {
+    contained: 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500',
+    outlined:
+      'border border-blue-600 text-blue-600 hover:bg-blue-50 focus:ring-blue-500',
+    text: 'text-blue-600 hover:bg-blue-50 focus:ring-blue-500',
+  },
+  secondary: {
+    contained:
+      'bg-gray-600 text-white hover:bg-gray-700 focus:ring-gray-500',
+    outlined:
+      'border border-gray-600 text-gray-600 hover:bg-gray-50 focus:ring-gray-500',
+    text: 'text-gray-600 hover:bg-gray-50 focus:ring-gray-500',
+  },
+  success: {
+    contained:
+      'bg-green-600 text-white hover:bg-green-700 focus:ring-green-500',
+    outlined:
+      'border border-green-600 text-green-600 hover:bg-green-50 focus:ring-green-500',
+    text: 'text-green-600 hover:bg-green-50 focus:ring-green-500',
+  },
+  error: {
+    contained: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
+    outlined:
+      'border border-red-600 text-red-600 hover:bg-red-50 focus:ring-red-500',
+    text: 'text-red-600 hover:bg-red-50 focus:ring-red-500',
+  },
+  info: {
+    contained: 'bg-sky-600 text-white hover:bg-sky-700 focus:ring-sky-500',
+    outlined:
+      'border border-sky-600 text-sky-600 hover:bg-sky-50 focus:ring-sky-500',
+    text: 'text-sky-600 hover:bg-sky-50 focus:ring-sky-500',
+  },
+  warning: {
+    contained:
+      'bg-yellow-600 text-black hover:bg-yellow-700 focus:ring-yellow-500',
+    outlined:
+      'border border-yellow-600 text-yellow-700 hover:bg-yellow-50 focus:ring-yellow-500',
+    text: 'text-yellow-700 hover:bg-yellow-50 focus:ring-yellow-500',
+  },
+} as const;
 
 const sizeStyles = {
-  xs: 'text-xs px-2.5 py-1.5',
-  sm: 'text-sm px-3 py-2',
-  md: 'text-sm px-4 py-2',
-  lg: 'text-base px-5 py-3',
+  small: 'text-xs px-2.5 py-1.5',
+  medium: 'text-sm px-4 py-2',
+  large: 'text-base px-5 py-3',
 };
 
 export const Button = forwardRef<HTMLElement, ButtonProps>(
   (
     {
-      variant = 'primary',
-      size = 'md',
+      variant = 'contained',
+      color = 'primary',
+      size = 'medium',
       leftIcon,
       rightIcon,
       loading,
@@ -86,7 +120,7 @@ export const Button = forwardRef<HTMLElement, ButtonProps>(
         ref={ref as any}
         className={twMerge(
           'inline-flex items-center justify-center border border-transparent font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors',
-          baseStyles[variant],
+          colorMap[color][variant],
           sizeStyles[size],
           fullWidth ? 'w-full' : 'inline-flex',
           disabled && 'opacity-50 cursor-not-allowed',
@@ -132,14 +166,14 @@ export default Button;
  * Usage Example:
  *
  * ```tsx
- * <Button variant="primary" size="md" onClick={() => alert('Clicked!')}>
+ * <Button variant="contained" color="primary" size="medium" onClick={() => alert('Clicked!')}>
  *   Submit
  * </Button>
  *
  * <Button
  *   as="a"
  *   href="/"
- *   variant="outline"
+ *   variant="outlined"
  *   leftIcon={<IconHome />}
  *   fullWidth
  * >
